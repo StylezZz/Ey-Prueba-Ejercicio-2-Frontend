@@ -26,9 +26,9 @@ interface Props {
 
 const AVAILABLE_SOURCES = [
   { id: "all", name: "All Sources (Automatic)", apiValue: "all" },
-  { id: "ofac", name: "OFAC (Office of Foreign Assets Control)", apiValue: "ofac" },
-  { id: "offshore-leaks", name: "ICIJ Offshore Leaks", apiValue: "offshore-leaks" },
-  { id: "world-bank", name: "World Bank Debarred Firms", apiValue: "world-bank" },
+  { id: "ofac", name: "OFA", apiValue: "ofac" },
+  { id: "offshore-leaks", name: "Offshore Leaks", apiValue: "offshore-leaks" },
+  { id: "world-bank", name: "The World Bank", apiValue: "world-bank" },
 ];
 
 const SOURCE_COLUMNS: Record<string, Array<{ key: string; label: string }>> = {
@@ -61,13 +61,33 @@ const SOURCE_COLUMNS: Record<string, Array<{ key: string; label: string }>> = {
 const SOURCE_NAME_MAP: Record<string, string> = {
   "OFAC": "ofac",
   "Offshore Leaks": "offshore-leaks",
+  "offshore leaks": "offshore-leaks",
   "The World Bank": "world-bank",
+  "the world bank": "world-bank",
 };
 
 const normalizeSourceName = (source: string): string => {
   if (SOURCE_NAME_MAP[source]) {
     return SOURCE_NAME_MAP[source];
   }
+  
+  const lowerSource = source.toLowerCase();
+  if (SOURCE_NAME_MAP[lowerSource]) {
+    return SOURCE_NAME_MAP[lowerSource];
+  }
+  
+  if (lowerSource.includes('offshore')) {
+    return 'offshore-leaks';
+  }
+  
+  if (lowerSource.includes('world') || lowerSource.includes('bank')) {
+    return 'world-bank';
+  }
+  
+  if (lowerSource.includes('ofac')) {
+    return 'ofac';
+  }
+  
   return source.toLowerCase().replace(/\s+/g, '-').trim();
 };
 
@@ -393,10 +413,12 @@ export default function RiskModal({ provider, onClose, open }: Props) {
                       
                       console.log("Source from backend:", sourceData.source);
                       console.log("Normalized source:", normalizedSource);
+                      console.log("Sample data:", sourceData.results[0]);
                       
                       const columns = SOURCE_COLUMNS[normalizedSource];
                       
                       console.log("Columns found:", columns);
+                      console.log("Column keys:", columns?.map(c => c.key));
                       
                       const totalPages = Math.ceil(sourceData.results.length / itemsPerPage);
                       const paginatedResults = sourceData.results.slice(
