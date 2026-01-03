@@ -1,6 +1,6 @@
 # Sistema de Gestión de Riesgo de Proveedores
 
-Este es un proyecto web que hice para gestionar proveedores y hacer análisis de riesgo (screening). Está hecho con React + TypeScript y se conecta a una API en .NET que corre en el backend.
+Este es un proyecto web que hice para gestionar proveedores y hacer análisis de riesgo (screening). Es una **Single Page Application (SPA)** construida con React + TypeScript que se conecta a una API en .NET que corre en el backend. Al ser una SPA, toda la navegación y las interacciones ocurren sin recargar la página, lo que hace que la experiencia sea más rápida y fluida.
 
 ## ¿Qué hace?
 
